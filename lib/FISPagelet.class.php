@@ -457,6 +457,16 @@ class FISPagelet {
                 }
                 $code .= '</script>';
             }
+
+			//
+            // auto pack
+            //
+
+            $jsCode = self::getCountUrl();
+            if($jsCode != ""){
+            	$code .=  '<script type="text/javascript">' . $jsCode . '</script>';
+            }
+
             $html = str_replace(self::JS_SCRIPT_HOOK, $code . self::JS_SCRIPT_HOOK, $html);
             $code = '';
             if (!empty($arr['css'])) {
