@@ -262,9 +262,7 @@ class FISPagelet {
 
         switch(self::$widget_mode) {
             case self::MODE_NOSCRIPT:
-                if (self::$_pagelet_id) {
-                    echo '<div id="' . $id . '">';
-                }
+                echo '<div id="' . $id . '">';
                 break;
             case self::MODE_QUICKLING:
                 $hit = self::$filter[$id];
@@ -354,12 +352,9 @@ class FISPagelet {
                 self::$_context = null;
             }
             self::$widget_mode = self::$mode;
-            echo '</div>';
-        } else {
-            if (self::$_pagelet_id) {
-                echo '</div>';
-            }
         }
+
+        echo '</div>';
 
         return $ret;
     }
