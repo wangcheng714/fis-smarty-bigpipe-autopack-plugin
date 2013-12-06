@@ -31,6 +31,8 @@ class FISResource {
 
     public static $framework = null;
 
+    private static $cdn = array();
+
     public static function reset() {
         self::$arrStaticCollection = array();
         self::$arrRequireAsyncCollection = array();
@@ -38,6 +40,17 @@ class FISResource {
         self::$arrAsyncDeleted = array();
         self::$arrScriptPool = array();
         self::$arrStylePool = array();
+    }
+
+    static public function setCdn($cdn) {
+        self::$cdn = $cdn;
+    }
+
+    static public function getCdn($type = 'sync') {
+        if ($type == 'async') {
+            return self::$cdn[1];
+        }
+        return self::$cdn[0];
     }
 
     public static function widgetStart() {
@@ -61,7 +74,7 @@ class FISResource {
                     unset(self::$arrAsyncDeleted[$id]);
                 }
             }
-            $ret['async'] = self::getResourceMap(self::$arrWidgetRequireAsync);
+            $ret['async'] = self::getResourceMap(self::$arrWidgetRequireAsync, self::getCdn('async'));
         }
 
         foreach (self::$arrWidgetStatic as $key => $val) {
@@ -157,7 +170,7 @@ class FISResource {
 
         //异步脚本
         if (self::$arrRequireAsyncCollection) {
-            self::$arrStaticCollection['async'] = self::getResourceMap(self::$arrRequireAsyncCollection);
+            self::$arrStaticCollection['async'] = self::getResourceMap(self::$arrRequireAsyncCollection, self::getCdn('async'));
         }
         unset(self::$arrStaticCollection['tpl']);
         return self::$arrStaticCollection;

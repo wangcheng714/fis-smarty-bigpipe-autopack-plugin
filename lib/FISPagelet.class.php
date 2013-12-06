@@ -359,16 +359,18 @@ class FISPagelet {
         return $ret;
     }
 
+
     /**
      * 设置cdn
      */
-    static public function setCdn($cdn) {
-        $cdn = trim($cdn);
-        self::$cdn = $cdn;
+    static public function setCdn($syncCdn, $asyncCdn) {
+        $syncCdn = trim($syncCdn);
+        $asyncCdn = trim($asyncCdn);
+        FISResource::setCdn(array($syncCdn, $asyncCdn));
     }
 
-    static public function getCdn() {
-        return self::$cdn;
+    static public function getCdn($type = 'sync') {
+        return FISResource::getCdn($type);
     }
 
 	static private function isSample($sample){
