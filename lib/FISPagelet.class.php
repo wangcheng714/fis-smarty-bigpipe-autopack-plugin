@@ -378,7 +378,10 @@ class FISPagelet {
         return $sample >= $tmp_sample;
     }
 
-    static private function getCountUrl(){
+    static private function getCountUrl($res){
+    	$js_num = count($res['js']);
+        $css_num = count($res['css']);
+        $req_num = $js_num + $css_num;
     	$code = "";
     	$sampleRate = self::getSampleRate();
     	if(self::isSample($sampleRate)){
@@ -390,7 +393,7 @@ class FISPagelet {
 	            self::$usedStatics= array_filter(array_unique(self::$usedStatics));
 	            $tmpStr = implode(',', self::$usedStatics);
 				$hashStr .= $tmpStr;
-				$code .= '(new Image()).src="http://nsclick.baidu.com/u.gif?pid=242&v=1&data=' . $tmpStr . "&page=" . $pageName . '&sid=' . $timeStamp . '&hash=<STATIC_HASH>' . '&fid=' . $fid . '";';
+				$code .= '(new Image()).src="http://nsclick.baidu.com/u.gif?pid=242&v=1&data=' . $tmpStr . "&page=" . $pageName . '&reqnum=' . $req_num . '&sid=' . $timeStamp . '&hash=<STATIC_HASH>' . '&fid=' . $fid . '";';
 	            $code = str_replace("<STATIC_HASH>", substr(md5($hashStr), 0, 10), $code);
 	        }
     	}
@@ -458,8 +461,7 @@ class FISPagelet {
 			//
             // auto pack
             //
-
-            $jsCode = self::getCountUrl();
+            $jsCode = self::getCountUrl($arr);
             if($jsCode != ""){
             	$code .=  '<script type="text/javascript">' . $jsCode . '</script>';
             }
@@ -580,7 +582,7 @@ class FISPagelet {
                 }
                 unset($pagelet);
 				//auto pack
-				$jsCode = self::getCountUrl();
+				$jsCode = self::getCountUrl($res);
                 if($jsCode != "" && !$_GET['fis_widget']){
                 	$res['script'] = $res['script'] ? $res['script'] . $jsCode : $jsCode;
                 }
