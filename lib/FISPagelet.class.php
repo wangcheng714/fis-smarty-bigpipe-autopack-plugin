@@ -577,8 +577,10 @@ class FISPagelet {
                 if ($res['style']) {
                     $res['style'] = convertToUtf8(implode("\n", $res['style']));
                 }
+                $pagelet_html = '';
                 foreach ($pagelets as &$pagelet) {
                     $pagelet['html'] = convertToUtf8(self::insertPageletGroup($pagelet['html']));
+                    $pagelet_html .= $pagelet['html'];
                 }
                 unset($pagelet);
 				//auto pack
@@ -587,11 +589,23 @@ class FISPagelet {
                 	$res['script'] = $res['script'] ? $res['script'] . $jsCode : $jsCode;
                 }
                 $title = convertToUtf8(self::$_title);
-                $html = json_encode(array(
-                    'title' => $title,
-                    'pagelets' => $pagelets,
-                    'resource_map' => $res
-                ));
+                //fis_cache_hash
+                $cache_hash = isset($_GET['fis_cache_hash']) ? $_GET['fis_cache_hash'] : '';
+                $runtime_hash = substr(md5($pagelet_html), 0, 7);
+
+                if ($cache_hash !== $runtime_hash) {
+                    $html = json_encode(array(
+                        'title' => $title,
+                        'pagelets' => $pagelets,
+                        'resource_map' => $res,
+                        'hash' => $runtime_hash,
+                        'cache' => '0' //not use cache
+                    ));
+                } else {
+                    $html = json_encode(array(
+                        'cache' => '1' //use cache
+                    ));
+                }
                 break;
             case self::MODE_BIGPIPE:
                 $external = FISResource::getArrStaticCollection();
