@@ -269,7 +269,7 @@ var BigPipe = function() {
 
         var url = location.href.split('#')[0] + '&' + args.join('&') + '&force_mode=1&fis_widget=true' +param;
         var store = window.localStorage;
-        var h_url = '';
+        var h_url = url;
 
         if (store) {
             var cache = store.getItem(url);
@@ -279,7 +279,7 @@ var BigPipe = function() {
             }
         }
         // 异步请求pagelets
-        ajax(o_url, function(res) {
+        ajax(h_url, function(res) {
             // 如果数据返回回来前，发生切页，则不再处理，否则当前页面有可能被干掉
             if(currentPageUrl !== location.href) {
                 return;
