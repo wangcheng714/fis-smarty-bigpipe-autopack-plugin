@@ -286,10 +286,10 @@ var BigPipe = function() {
             }
 
             var data = parseJSON(res);
-            if (res.cache != 0) {
+            if (data.cache !== '0') {
                 data = parseJSON(store.getItem(url));
             } else {
-                store.setItem(url, data);
+                store.setItem(url, res);
             }
 
             resource = data;
