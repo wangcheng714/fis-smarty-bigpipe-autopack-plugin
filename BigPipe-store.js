@@ -270,9 +270,10 @@ var BigPipe = function() {
         var url = location.href.split('#')[0] + '&' + args.join('&') + '&force_mode=1&fis_widget=true' +param;
         var store = window.localStorage;
         var h_url = url;
-
+        //localStorage key
+        var lc_id = location.hostname + location.pathname + '?' + args.join('&');
         if (store) {
-            var cache = store.getItem(url);
+            var cache = store.getItem(lc_id);
             if (cache) {
                 cache = parseJSON(cache);
                 h_url = url + '&fis_cache_hash=' + cache['hash'];
@@ -287,9 +288,9 @@ var BigPipe = function() {
 
             var data = parseJSON(res);
             if (data.cache !== '0') {
-                data = parseJSON(store.getItem(url));
+                data = parseJSON(store.getItem(lc_id));
             } else {
-                store.setItem(url, res);
+                store.setItem(lc_id, res);
             }
 
             resource = data;
